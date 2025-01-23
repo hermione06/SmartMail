@@ -4,14 +4,21 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.mail.smart_email_writer.entity.EmailRequest;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 public class EmailGeneratorService {
+
+    private final WebClient webClient;
 
     @Value("${gemini.api.url}")
     private String geminiApiUrl;
     @Value("${gemini.api.key}")
     private String geminiApiKey;
+
+    public EmailGeneratorService (WebClient webClient){
+        this.webClient = webClient;
+    }
 
     public String generateReplyEmail(EmailRequest emailRequest){
         String prompt = buildPrompt(emailRequest);
@@ -24,10 +31,22 @@ public class EmailGeneratorService {
             }
         );
         // Send request -> return response
-        return "";
+        String response = webClient.post()
+            .uri(geminiApiUrl+geminiApiKey)
+            .header("Content-Type","application/json")
+            .retrieve()
+            .bodyToMono(String.class)
+            .block();
 
+        return extractResponseContent(response);
+        
+            }
+        
+    private String extractResponseContent(String response) {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'extractResponseContent'");
     }
-
+        
     public String buildPrompt(EmailRequest emailRequest){
         StringBuilder prompt = new StringBuilder();
         prompt.append("Generate a professional email reply for the following email. Please don't write subject lines.");
