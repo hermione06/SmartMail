@@ -3,6 +3,9 @@ package com.mail.smart_email_writer.service;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mail.smart_email_writer.entity.EmailRequest;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -16,8 +19,8 @@ public class EmailGeneratorService {
     @Value("${gemini.api.key}")
     private String geminiApiKey;
 
-    public EmailGeneratorService (WebClient webClient){
-        this.webClient = webClient;
+    public EmailGeneratorService (WebClient.Builder webClientBuilder){
+        this.webClient = webClientBuilder.build();
     }
 
     public String generateReplyEmail(EmailRequest emailRequest){
@@ -34,6 +37,7 @@ public class EmailGeneratorService {
         String response = webClient.post()
             .uri(geminiApiUrl+geminiApiKey)
             .header("Content-Type","application/json")
+            .bodyValue(requestBody)
             .retrieve()
             .bodyToMono(String.class)
             .block();
@@ -43,8 +47,21 @@ public class EmailGeneratorService {
             }
         
     private String extractResponseContent(String response) {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'extractResponseContent'");
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode rootNode = mapper.readTree(response);
+            return rootNode.path("candidates")
+                            .get(0)
+                            .path("content")
+                            .path("parts")
+                            .get(0)
+                            .path("text")
+                            .asText();
+            
+        } catch (Exception e) {
+            return "Error in processing request: "+e.getMessage();
+        }
+                
     }
         
     public String buildPrompt(EmailRequest emailRequest){
