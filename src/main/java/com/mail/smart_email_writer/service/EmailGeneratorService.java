@@ -51,12 +51,12 @@ public class EmailGeneratorService {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode rootNode = mapper.readTree(response);
             return rootNode.path("candidates")
-                            .get(0)
-                            .path("content")
-                            .path("parts")
-                            .get(0)
-                            .path("text")
-                            .asText();
+                    .get(0)
+                    .path("content")
+                    .path("parts")
+                    .get(0)
+                    .path("text")
+                    .asText();
             
         } catch (Exception e) {
             return "Error in processing request: "+e.getMessage();
