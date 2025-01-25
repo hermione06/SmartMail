@@ -1,0 +1,3 @@
+[submodule "smart-email-writer"]
+	path = smart-email-writer
+	url = https://github.com/hermione06/SmartMail.git
