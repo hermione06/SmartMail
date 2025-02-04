@@ -48,8 +48,8 @@ Smart Mail Generator is an intelligent email reply generator built using **Sprin
 3. **Build and Run**:
 
    ```bash
-   mvn clean install
-   mvn spring-boot:run
+  ./gradlew build
+  ./gradlew bootRun
    ```
 
 4. **Access the API**:
