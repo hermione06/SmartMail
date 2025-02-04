@@ -46,10 +46,9 @@ Smart Mail Generator is an intelligent email reply generator built using **Sprin
    ```
 
 3. **Build and Run**:
-
-   ```bash
-  ./gradlew build
-  ./gradlew bootRun
+ ```bash
+   ./gradlew build
+   ./gradlew bootRun
    ```
 
 4. **Access the API**:
