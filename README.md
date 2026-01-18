@@ -33,7 +33,7 @@ Smart Mail Generator is an intelligent email reply generator built using **Sprin
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/yourusername/SmartMail.git
+   git clone https://github.com/hermione06/SmartMail.git
    cd SmartMail
    ```
 
